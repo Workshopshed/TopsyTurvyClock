@@ -1,26 +1,5 @@
-//Copyright 2012 Based on the work of Igor Campos
+//Based on the work of Igor Campos
 //
-//This file is part of CustomStepper.
-//
-//CustomStepper is free software: you can redistribute it and/or modify
-//it under the terms of the GNU General Public License as published by
-//the Free Software Foundation, either version 3 of the License, or
-//(at your option) any later version.
-//
-//CustomStepper is distributed in the hope that it will be useful,
-//but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//GNU General Public License for more details.
-//
-//You should have received a copy of the GNU General Public License
-//along with CustomStepper.  If not, see <http://www.gnu.org/licenses/>.
-
-  //when a command is finished it the isDone will return true, it is important to notice that
-  //you can't give one command just after another since they don't block the execution, 
-  //which allows the program to control multiple motors
-  
-  //Run is very important and must be placed in your loop, it is this that makes the motor steps
-  //when necessary
 
 #include "CustomStepper.h"
 

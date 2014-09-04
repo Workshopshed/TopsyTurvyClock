@@ -14,7 +14,9 @@ class Clock {
     /* Temp, replace with Time.h functions etc. */
     int ihour;
     int iminute;
+    TimeZone _tz;
   public:
+    Clock(TimeZone tz)
     boolean parseTime(String t);
     boolean parseDate(String d); 
     void display();

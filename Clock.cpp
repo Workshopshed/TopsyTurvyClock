@@ -1,5 +1,11 @@
 #include "Clock.h"
 
+Clock::Clock(TimeZone tz,RTC rtc)
+{
+    _tz = tz;
+    _RTC = rtc;
+}
+
 //Todo: Replace with calls to RTC
 int Clock::hour()
 {

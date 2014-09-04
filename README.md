@@ -13,6 +13,8 @@ Setup and loop don't have much to do, simply repeatedly calling the controller's
 Thanks to
 ---------
 
-CustomStepper class by Igor Campos.
+CustomStepper class by Igor Campos
+
 TimeZone class by Jack Christensen
+
 Time by Michael Margolis

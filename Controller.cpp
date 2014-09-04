@@ -1,12 +1,23 @@
 #include "Controller.h"
 
+Controller::Controller(stepper1,stepper2,clock)
+{
+  //Todo: Merge this details from my other controller code
+}
+
 void Controller::init()
 {
   //Setup Time provider
-  setSyncProvider(??);
+  setSyncProvider(RTC.get); 
   setSyncInterval(59);
+  if(timeStatus()!= timeSet)
+    Serial.println("Unable to sync with the RTC");
+  else
+    Serial.println("RTC has set the system time"); 
+  
   
   //Setup Motors
+  //Todo: Merge this details from my other controller code  
   
   //Mark clock as running
   this->running = true;

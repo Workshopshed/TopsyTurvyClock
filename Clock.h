@@ -15,8 +15,9 @@ class Clock {
     int ihour;
     int iminute;
     TimeZone _tz;
+    RTC _rtc;
   public:
-    Clock(TimeZone tz)
+    Clock(TimeZone tz,RTC rtc);
     boolean parseTime(String t);
     boolean parseDate(String d); 
     void display();

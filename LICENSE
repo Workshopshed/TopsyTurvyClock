@@ -1,1 +1,27 @@
-Todo: Resolve the various different types and styles of the shared libaries into a consistent single license
+This code is covered by multiple licenses, GPL, LGPL, MIT and ShareAlike
+
+The modified CustomStepper class Igor Campos is GPL3 which means if you distribute that or the whole project then the code is covered by GPL3 http://www.gnu.org/copyleft/gpl.html
+The Time library is Lesser GPL - http://www.gnu.org/licenses/lgpl.html
+The TimeZone class by Jack Christensen https://github.com/JChristensen/Timezone is Creative Commons Attribution ShareAlike 3.0 Unported License http://creativecommons.org/licenses/by-sa/3.0/
+
+All of my code is covered by the MIT license so if you want to use those parts in isolation that are not written by a thirdparty you are free to do so.
+
+The MIT License (MIT)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

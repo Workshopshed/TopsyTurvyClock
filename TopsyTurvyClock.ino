@@ -14,7 +14,7 @@ Timezone tz(BST, GMT);
 
 Clock clock(tz);
 
-Controller con(stepper1,stepper2,clock;
+Controller con(stepper1,stepper2,clock);
 
 NonBlockDelay d;
 bool motorsinit;

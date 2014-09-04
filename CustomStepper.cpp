@@ -19,6 +19,14 @@
 #include "CustomStepper.h"
 
 // My motors seem to be capable of handling upto about 16RPM but have good torque around 10rpm
+//Full constructor, just the first 4 parameters are necessary, they are the pins connected to the motor,
+//the others are optional, and default to the following below
+// 5 and 6 refer to the LED and Opto transistor pins
+//the 7th paramater is the steps sequence, where the 1st element of the array is the number of steps
+//it can have a maximum of 8 steps
+//the 8th parameter is the SPR (Steps Per Rotation)
+//the 9th parameter is the RPM
+//the 10th parameter is the rotation orientation
 CustomStepper::CustomStepper(byte pin1, byte pin2, byte pin3, byte pin4, byte pinOptoLED, byte pinOptoTran, byte steps[], float spr, float rpm, motordir direction)
 {
   this->setRPM(rpm);

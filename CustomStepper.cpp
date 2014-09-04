@@ -18,6 +18,7 @@
 
 #include "CustomStepper.h"
 
+// My motors seem to be capable of handling upto about 16RPM but have good torque around 10rpm
 CustomStepper::CustomStepper(byte pin1, byte pin2, byte pin3, byte pin4, byte pinOptoLED, byte pinOptoTran, byte steps[], float spr, float rpm, motordir direction)
 {
   this->setRPM(rpm);

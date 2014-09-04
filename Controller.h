@@ -15,6 +15,8 @@ class Controller {
   private:
     String commandbuffer;
     Clock clock;
+    float CalcMinutePos(int m);
+    float CalcHourPos(int h); 
     bool running;
   public:
     void init();

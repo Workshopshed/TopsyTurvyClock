@@ -1,6 +1,6 @@
 #include "Clock.h"
 
-//Todo: Replace with calls to RTV
+//Todo: Replace with calls to RTC
 int Clock::hour()
 {
     return this->ihour;

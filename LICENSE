@@ -1,7 +1,7 @@
 This code is covered by multiple licenses, GPL, LGPL, MIT and ShareAlike
 
 The modified CustomStepper class Igor Campos is GPL3 which means if you distribute that or the whole project then the code is covered by GPL3 http://www.gnu.org/copyleft/gpl.html
-The Time library is Lesser GPL - http://www.gnu.org/licenses/lgpl.html
+The Time library by Michael Margolis is Lesser GPL - http://www.gnu.org/licenses/lgpl.html
 The TimeZone class by Jack Christensen https://github.com/JChristensen/Timezone is Creative Commons Attribution ShareAlike 3.0 Unported License http://creativecommons.org/licenses/by-sa/3.0/
 
 All of my code is covered by the MIT license so if you want to use those parts in isolation that are not written by a thirdparty you are free to do so.

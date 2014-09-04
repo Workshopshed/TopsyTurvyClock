@@ -2,6 +2,13 @@
 
 void Controller::init()
 {
+  //Setup Time provider
+  setSyncProvider(??);
+  setSyncInterval(59);
+  
+  //Setup Motors
+  
+  //Mark clock as running
   this->running = true;
 }
 

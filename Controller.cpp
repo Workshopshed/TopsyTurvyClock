@@ -8,6 +8,7 @@ Controller::Controller(stepper1,stepper2,clock)
 void Controller::init()
 {
   //Setup Time provider
+  //todo: Move to clock?
   setSyncProvider(RTC.get); 
   setSyncInterval(59);
   if(timeStatus()!= timeSet)
@@ -57,7 +58,7 @@ void Controller::readinput()
         this->running = false;
         break;
       case 'H':
-        //Todo: Home motoros
+        //Todo: Home motors
         break;
       default:
         clock.display();
@@ -66,8 +67,27 @@ void Controller::readinput()
   }
  }
  
+ float Controller::CalcMinutePos(int m)
+ {
+   //Todo: What degrees is M at?
+ }
+ 
+ float Controller::CalcHourPos(int h,int m)
+ {
+   //Todo: What degrees is h at?
+ }
+ 
  void Controller::run()
   {
+    if (this->running) {
+      if (motorsM->isDone() && motorH->isDone()) {
+        motorH->rotateToDegrees(CalcMinutePos(RTC.hour(),RTC.minute());
+        motorM->rotateToDegrees(CalcHourPos(RTC.minute());
+      }
+    }
+    
+    motorH.run();
+    motorM.run();
   }
   
 

@@ -1,9 +1,9 @@
 #include "Clock.h"
 
-Clock::Clock(TimeZone tz,RTC rtc)
+Clock::Clock(Timezone *tz,DS1307RTC *rtc)
 {
     _tz = tz;
-    _RTC = rtc;
+    _rtc = rtc;
 }
 
 //Todo: Replace with calls to RTC

@@ -1,4 +1,8 @@
 /* Class for setting and reading the clock */
+#include "Time.h"
+#include "Timezone.h"   //https://github.com/JChristensen/Timezone
+#include <Wire.h>
+#include "DS1307RTC.h" // http://www.pjrc.com/teensy/td_libs_DS1307RTC.html
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #include <Arduino.h>
@@ -10,19 +14,20 @@
 #define CLOCK_H
 
 class Clock {
-  private:
-    /* Temp, replace with Time.h functions etc. */
-    int ihour;
-    int iminute;
-    TimeZone _tz;
-    RTC _rtc;
   public:
-    Clock(TimeZone tz,RTC rtc);
+    Clock(Timezone *tz,DS1307RTC *rtc);
     boolean parseTime(String t);
     boolean parseDate(String d); 
     void display();
     int hour();
     int minute();
+  private:
+    /* Temp, replace with Time.h functions etc. */
+    int ihour;
+    int iminute;
+    Timezone *_tz;
+    DS1307RTC *_rtc;
+  
 };
 
 #endif

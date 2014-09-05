@@ -1,8 +1,9 @@
 #include "Controller.h"
 
-Controller::Controller(stepper1,stepper2,clock)
+Controller::Controller(CustomStepper *stepper1,CustomStepper *stepper2,Clock *clock)
 {
   //Todo: Merge this details from my other controller code
+  _clock = clock;
 }
 
 void Controller::init()
@@ -36,7 +37,7 @@ void Controller::readinput()
         Serial.println("Todo:Instructions here");
         break;
       case 'T':
-        if (this->clock.parseTime(this->commandbuffer.substring(1))){
+        if (this->_clock->parseTime(this->commandbuffer.substring(1))){
           Serial.println("Setting Time");
         }
         else {
@@ -44,7 +45,7 @@ void Controller::readinput()
         }
         break;
       case 'D':
-        if (this->clock.parseDate(this->commandbuffer.substring(1))){
+        if (this->_clock->parseDate(this->commandbuffer.substring(1))){
           Serial.println("Setting Date");
         }
         else {
@@ -61,7 +62,7 @@ void Controller::readinput()
         //Todo: Home motors
         break;
       default:
-        clock.display();
+        this->_clock->display();
       }
     }
   }
@@ -80,14 +81,14 @@ void Controller::readinput()
  void Controller::run()
   {
     if (this->running) {
-      if (motorsM->isDone() && motorH->isDone()) {
-        motorH->rotateToDegrees(CalcMinutePos(RTC.hour(),RTC.minute());
-        motorM->rotateToDegrees(CalcHourPos(RTC.minute());
+      if (this->stepperM->isDone() && this->stepperH->isDone()) {
+        this->stepperH->rotateToDegrees(CalcHourPos(this->_clock->hour(),this->_clock->minute()));
+        this->stepperM->rotateToDegrees(CalcMinutePos(this->_clock->minute()));
       }
     }
     
-    motorH.run();
-    motorM.run();
+    this->stepperH->run();
+    this->stepperM->run();
   }
   
 

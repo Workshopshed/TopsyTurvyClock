@@ -14,16 +14,16 @@
 
 class Controller {
   public:
-    Controller(CustomStepper *stepper1,CustomStepper *stepper2,Clock *clock);
+    Controller(CustomStepper *stepperH,CustomStepper *stepperM,Clock *clock);
     void init();
     void readinput();
     void run();
-    
+    void dump();
   private:
     String commandbuffer;
     Clock *_clock;
-    CustomStepper *stepperH;
-    CustomStepper *stepperM;
+    CustomStepper *_stepperH;
+    CustomStepper *_stepperM;
     float CalcMinutePos(int m);
     float CalcHourPos(int h, int m); 
     bool running;

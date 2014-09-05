@@ -1,21 +1,16 @@
 #include "Controller.h"
 
-Controller::Controller(CustomStepper *stepper1,CustomStepper *stepper2,Clock *clock)
+Controller::Controller(CustomStepper *stepperH,CustomStepper *stepperM,Clock *clock)
 {
   //Todo: Merge this details from my other controller code
   _clock = clock;
+  _stepperH = stepperH;
+  _stepperM = stepperM;
 }
 
 void Controller::init()
 {
-  //Setup Time provider
-  //todo: Move to clock?
-  setSyncProvider(RTC.get); 
-  setSyncInterval(59);
-  if(timeStatus()!= timeSet)
-    Serial.println("Unable to sync with the RTC");
-  else
-    Serial.println("RTC has set the system time"); 
+  _clock->init();
   
   
   //Setup Motors
@@ -81,14 +76,18 @@ void Controller::readinput()
  void Controller::run()
   {
     if (this->running) {
-      if (this->stepperM->isDone() && this->stepperH->isDone()) {
-        this->stepperH->rotateToDegrees(CalcHourPos(this->_clock->hour(),this->_clock->minute()));
-        this->stepperM->rotateToDegrees(CalcMinutePos(this->_clock->minute()));
+      if (this->_stepperM->isDone() && this->_stepperH->isDone()) {
+        this->_stepperH->rotateToDegrees(CalcHourPos(this->_clock->hour(),this->_clock->minute()));
+        this->_stepperM->rotateToDegrees(CalcMinutePos(this->_clock->minute()));
       }
     }
     
-    this->stepperH->run();
-    this->stepperM->run();
+    this->_stepperH->run();
+    this->_stepperM->run();
   }
   
-
+void Controller::dump()
+{
+   this->_stepperH->dump();
+   this->_stepperM->dump();
+}

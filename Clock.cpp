@@ -6,6 +6,16 @@ Clock::Clock(Timezone *tz,DS1307RTC *rtc)
     _rtc = rtc;
 }
 
+void Clock::init(){
+  //Setup Time provider
+  setSyncProvider(_rtc->get); 
+  setSyncInterval(59);
+  if(timeStatus()!= timeSet)
+    Serial.println("Unable to sync with the RTC");
+  else
+    Serial.println("RTC has set the system time"); 
+}
+
 //Todo: Replace with calls to RTC
 int Clock::hour()
 {

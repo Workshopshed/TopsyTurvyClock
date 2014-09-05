@@ -19,6 +19,7 @@ class Clock {
     boolean parseTime(String t);
     boolean parseDate(String d); 
     void display();
+    void init();
     int hour();
     int minute();
   private:

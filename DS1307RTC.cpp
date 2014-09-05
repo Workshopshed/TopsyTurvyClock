@@ -138,5 +138,5 @@ uint8_t DS1307RTC::bcd2dec(uint8_t num)
 
 bool DS1307RTC::exists = false;
 
-DS1307RTC RTC = DS1307RTC(); // create an instance for the user
+//DS1307RTC RTC = DS1307RTC(); // create an instance for the user
 

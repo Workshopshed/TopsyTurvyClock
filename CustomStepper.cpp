@@ -76,7 +76,7 @@ void CustomStepper::dostep()
         this->nextStep == this->noSteps-1 ? this->nextStep = 0 : this->nextStep++;
       else if (this->direction == CCW)
         this->nextStep == 0 ? this->nextStep = this->noSteps-1 : this->nextStep--;
-      this->stepsGone++;
+      this->stepsToGo--;
       this->calcAbsolutePosition();
 }
 
@@ -90,7 +90,7 @@ void CustomStepper::step()
          this->mode = HOME;         
   if (this->done) return;
   
-  if (this->stepsToGo - this->stepsGone > 0)
+  if (this->stepsToGo > 0)
   {
     if (this->direction != STOP)
       this->dostep();
@@ -99,28 +99,16 @@ void CustomStepper::step()
   }
   else if (this->mode == CONTINUOUS || this->mode == UNHOME || this->mode == HOME)
   {
-    this->stepsGone = 0;
+    this->stepsToGo = this->spr;
     this->step();
-  }
-  else if (this->mode == ROTATIONS)
-  {
-    this->stepsGone = 0;
-    this->stepsToGo = this->spr + this->stepCorrection + 0.5; //Steps per rotation + the step correction + 0.5 to force round
-    this->stepCorrection = this->spr + this->stepCorrection - this->stepsToGo; //adjust the step correction for the next steps
-    if (++this->rotationsGone >= this->rotationsToGo)
-      this->disable();
-    else
-      this->step();
   }
   else if (this->mode == STEPS)
     this->disable();
- 
-    
 }
 
 void CustomStepper::home()
 {
-  this->rotate();
+  this->rotateDegrees(360);
   if (this->readOpto() == 1){
     this->unhome();
     return;
@@ -169,51 +157,38 @@ void CustomStepper::setDirection(motordir direction)
     this->direction = direction;
 }
 
-void CustomStepper::rotate(unsigned int rotations)
-{
-  if (this->spr > 0 && this->rpm > 0)
-  {
-    if (rotations > 0)
-      this->mode = ROTATIONS;
-    else
-      this->mode = CONTINUOUS;
-      
-    this->rotationsToGo = rotations;
-    this->rotationsGone = 0;
-    this->stepsToGo = this->spr + this->stepCorrection + 0.5; //Steps per rotation + the step correction + 0.5 to force round
-    this->stepCorrection = this->spr + this->stepCorrection - this->stepsToGo; //adjust the step correction for the next steps
-    this->stepsGone = 0;
-    this->done = false;
-    this->calcTime();
-    this->step();
-  }
-}
-
 void CustomStepper::rotateDegrees(float degrees)
 {
   if (this->spr > 0 && this->rpm > 0 && degrees > 0)
   {
     this->mode = STEPS;
-    this->stepsToGo = degrees/360.0*this->spr + this->stepCorrection + 0.5;
-    this->stepCorrection = degrees/360.0*this->spr + this->stepCorrection - this->stepsToGo;
-    this->stepsGone = 0;
+    this->stepsToGo = this->degreesToSteps(degrees) + this->stepCorrection + 0.5;
+    this->stepCorrection = this->degreesToSteps(degrees) + this->stepCorrection - this->stepsToGo;
     this->done = false;
     this->calcTime();
     this->step();
   }
 }
 
+unsigned int CustomStepper::degreesToSteps(float degrees){
+  return ((degrees/360.0)*this->spr);
+}
+
 void CustomStepper::rotateToDegrees(float degrees)
 {
-  //Workout current position and then call rotate
-  //Note might need to change direction
-  //Calculation might be exact opposite of that below.
+  if (degrees > 180) {
+    this->direction == CCW;
+    degrees = 360 - degrees;
+  }
+  else {
+    this->direction == CW;
+  }
+  this->rotateDegrees(degrees);
 }
 
 float CustomStepper::positionDegrees()
 {
-  //Calculate the absolute angle based on the absolute position
-  return this->absolutePosition;
+  return ((this->absolutePosition * 360.0) / this->spr);
 }
 
 void CustomStepper::calcAbsolutePosition()
@@ -258,12 +233,6 @@ void CustomStepper::dump()
         Serial.println(this->pin1);  
     Serial.print(" stepsToGo: ");
 	Serial.println(this->stepsToGo);
-    Serial.print(" stepsGone: ");
-	Serial.println(this->stepsGone);
-    Serial.print(" rotationsToGo: ");
-	Serial.println(this->rotationsToGo);
-    Serial.print(" rotationsGone: ");
-	Serial.println(this->rotationsGone);
     Serial.print(" mode: ");
 	Serial.println(this->mode);
     Serial.print(" direction: ");

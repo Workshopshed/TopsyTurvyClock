@@ -9,7 +9,7 @@
 #include <WProgram.h>
 #endif
 
-enum motormode {CONTINUOUS, ROTATIONS, STEPS , HOME, UNHOME};
+enum motormode {CONTINUOUS, STEPS , HOME, UNHOME};
 enum motordir  {STOP, CW, CCW};
 
 class CustomStepper
@@ -28,10 +28,7 @@ class CustomStepper
     motordir direction;
     motormode mode;
     unsigned int stepsToGo;
-    unsigned int stepsGone;
-    unsigned int rotationsToGo;
-    unsigned int rotationsGone;
-    int absolutePosition;
+    unsigned int absolutePosition;
     void calcAbsolutePosition();
     float stepCorrection;
     float rpm;
@@ -46,13 +43,13 @@ class CustomStepper
     void setupOpto();
     void setupMotor();
     boolean readOpto();
-    void unhome();    
+    void unhome();
+    unsigned int degreesToSteps(float degrees);    
   public:
     CustomStepper(byte pin1, byte pin2, byte pin3, byte pin4, byte pinOptpLED, byte pinOptoTran, byte steps[] = (byte[]){8, B1000, B1100, B0100, B0110, B0010, B0011, B0001, B1001}, float spr = 4075.7728395, float rpm = 12, motordir direction = CW);
     void setRPM(float RPM);
     void setSPR(float SPR);
     void setDirection(motordir direction = CW);
-    void rotate(unsigned int rotations = 0);
     void rotateDegrees(float degrees);
     void rotateToDegrees(float degrees);
     float positionDegrees();

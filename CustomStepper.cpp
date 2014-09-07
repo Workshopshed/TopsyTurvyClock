@@ -175,15 +175,19 @@ unsigned int CustomStepper::degreesToSteps(float degrees){
 }
 
 void CustomStepper::rotateToDegrees(float degrees)
-{
-  if (degrees > 180) {
+{ 
+  float target = degrees-this->positionDegrees();
+  if (target < 0) {
+    target = 360 + target;
+  }
+  if (target > 180) {
     this->direction == CCW;
-    degrees = 360 - degrees;
+    target = 360 - target;
   }
   else {
     this->direction == CW;
   }
-  this->rotateDegrees(degrees);
+  this->rotateDegrees(target);
 }
 
 float CustomStepper::positionDegrees()
@@ -245,8 +249,6 @@ void CustomStepper::dump()
         Serial.println(this->time);
     Serial.print(" Timer:");
         Serial.println(this->timer);   
-    Serial.print(" Micros:");
-        Serial.println(micros());
     Serial.print(" Opto:");
         Serial.print(this->readOpto());
     Serial.print(" Done:");

@@ -27,6 +27,11 @@ int Clock::minute()
   return this->iminute;
 }
 
+int Clock::second()
+{
+  return 0;
+}
+
 void Clock::display()
 {
    Serial.print(this->ihour);

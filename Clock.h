@@ -22,6 +22,7 @@ class Clock {
     void init();
     int hour();
     int minute();
+    int second();
   private:
     /* Temp, replace with Time.h functions etc. */
     int ihour;

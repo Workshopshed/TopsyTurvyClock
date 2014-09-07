@@ -2,21 +2,31 @@
 
 Controller::Controller(CustomStepper *stepperH,CustomStepper *stepperM,Clock *clock)
 {
-  //Todo: Merge this details from my other controller code
   _clock = clock;
   _stepperH = stepperH;
   _stepperM = stepperM;
+  //Can't find a nice way to initalise these
+  _positions[0] = 300;
+  _positions[1] = 120;
+  _positions[2] = 270;
+  _positions[3] = 180;
+  _positions[4] = 330;
+  _positions[5] = 60;
+  _positions[6] = 0;
+  _positions[7] = 90;
+  _positions[8] = 150;
+  _positions[9] = 240;
+  _positions[10] = 30;
+  _positions[11] = 210;
 }
 
 void Controller::init()
 {
   _clock->init();
-  
-  
-  //Setup Motors
-  //Todo: Merge this details from my other controller code  
-  
-  //Mark clock as running
+  _stepperH->setRPM(10);
+  _stepperM->setRPM(10);
+  _stepperH->home();
+  _stepperM->home();
   this->running = true;
 }
 
@@ -63,14 +73,14 @@ void Controller::readinput()
   }
  }
  
- float Controller::CalcMinutePos(int m)
+ float Controller::CalcMinutePos(int m,int s)
  {
-   //Todo: What degrees is M at?
+   return _positions[(int)(m / 5.0)-1];
  }
  
  float Controller::CalcHourPos(int h,int m)
  {
-   //Todo: What degrees is h at?
+   return _positions[h-1];
  }
  
  void Controller::run()
@@ -78,7 +88,7 @@ void Controller::readinput()
     if (this->running) {
       if (this->_stepperM->isDone() && this->_stepperH->isDone()) {
         this->_stepperH->rotateToDegrees(CalcHourPos(this->_clock->hour(),this->_clock->minute()));
-        this->_stepperM->rotateToDegrees(CalcMinutePos(this->_clock->minute()));
+        this->_stepperM->rotateToDegrees(CalcMinutePos(this->_clock->minute(),this->_clock->second()));
       }
     }
     
@@ -88,6 +98,17 @@ void Controller::readinput()
   
 void Controller::dump()
 {
+   Serial.println("=================");
+   Serial.print(" Micros:");
+   Serial.println(micros());
+   Serial.print(" Hours:");
+   Serial.println(this->_clock->hour());   
+   Serial.print(" Target Angle:");
+   Serial.println(CalcHourPos(this->_clock->hour(),this->_clock->minute()));
+   Serial.print(" Minutes:");
+   Serial.println(this->_clock->minute());   
+   Serial.print(" Target Angle:");
+   Serial.println(CalcMinutePos(this->_clock->minute(),this->_clock->second()));
    this->_stepperH->dump();
    this->_stepperM->dump();
 }

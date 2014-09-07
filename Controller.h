@@ -24,10 +24,10 @@ class Controller {
     Clock *_clock;
     CustomStepper *_stepperH;
     CustomStepper *_stepperM;
-    float CalcMinutePos(int m);
+    float CalcMinutePos(int m, int s);
     float CalcHourPos(int h, int m); 
     bool running;
-      
+    float _positions[12];
 };
 
 #endif

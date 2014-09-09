@@ -181,11 +181,11 @@ void CustomStepper::rotateToDegrees(float degrees)
     target = 360 + target;
   }
   if (target > 180) {
-    this->direction == CCW;
+    this->setDirection(CCW);
     target = 360 - target;
   }
   else {
-    this->direction == CW;
+    this->setDirection(CW);
   }
   this->rotateDegrees(target);
 }

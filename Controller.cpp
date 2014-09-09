@@ -75,12 +75,12 @@ void Controller::readinput()
  
  float Controller::CalcMinutePos(int m,int s)
  {
-   return _positions[(int)(m / 5.0)-1];
+   return _positions[(int)(m / 5.0)-1] + ((m % 5) * 6.0) + (s * 0.1);
  }
  
  float Controller::CalcHourPos(int h,int m)
  {
-   return _positions[h-1];
+   return _positions[h-1] + (m * 0.5);
  }
  
  void Controller::run()

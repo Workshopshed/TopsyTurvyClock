@@ -64,7 +64,9 @@ void Controller::readinput()
         this->running = false;
         break;
       case 'H':
-        //Todo: Home motors
+        this->_stepperH->home();
+        this->_stepperM->home();
+        this->running = false;
         break;
       default:
         this->_clock->display();

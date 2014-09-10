@@ -39,6 +39,7 @@ void Clock::display()
    Serial.println(this->iminute);
 };
 
+//Extend to seconds?
 boolean Clock::parseTime(String t)
 {
   if (t.length() != 5) return false;
@@ -47,8 +48,25 @@ boolean Clock::parseTime(String t)
   if (this->ihour>23) return false;
   this->iminute=t.substring(3,5).toInt();
   if (this->iminute>59) return false;
-  //todo: Set RTC here
+  
+  //Todo replace iminutes and ihour with local var
+  set(this->ihour,this->iminute,0);
+
   return true;
+}
+
+void Clock::set(int h,int m,int s)
+{
+  tmElements_t tm;
+  time_t t;
+  
+  tm.Hour = h;  
+  tm.Minute = m;
+  tm.Second = s;
+  t = makeTime(tm);
+  
+  RTC.set(t);   // set the RTC and the system time to the received value
+  setTime(t); 
 }
 
 boolean Clock::parseDate(String t)

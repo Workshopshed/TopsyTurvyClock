@@ -5,7 +5,7 @@ Controller::Controller(CustomStepper *stepperH,CustomStepper *stepperM,Clock *cl
   _clock = clock;
   _stepperH = stepperH;
   _stepperM = stepperM;
-  //Can't find a nice way to initalise these
+  //initialise positions to match those on the clock face 0 = 12
   _positions[0] = 300;
   _positions[1] = 120;
   _positions[2] = 270;

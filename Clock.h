@@ -29,7 +29,7 @@ class Clock {
     int iminute;
     Timezone *_tz;
     DS1307RTC *_rtc;
-  
+    void set(int h,int m,int s);
 };
 
 #endif

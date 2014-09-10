@@ -16,7 +16,7 @@ void Clock::init(){
     Serial.println("RTC has set the system time"); 
 }
 
-//Todo: Replace with calls to RTC
+//Todo: Replace with calls to RTC converted to local time with TimeZone
 int Clock::hour()
 {
     return this->ihour;
@@ -34,9 +34,17 @@ int Clock::second()
 
 void Clock::display()
 {
-   Serial.print(this->ihour);
+   Serial.print(hour());
    Serial.print(':');
-   Serial.println(this->iminute);
+   Serial.println(minute());
+   
+   Serial.print(' ');
+   Serial.println(day());
+   Serial.print('/');
+   Serial.println(month());
+   Serial.print('/');
+   Serial.println(year());
+   
 };
 
 //Extend to seconds?
@@ -49,20 +57,24 @@ boolean Clock::parseTime(String t)
   this->iminute=t.substring(3,5).toInt();
   if (this->iminute>59) return false;
   
+  //Todo adjust for local time?
   //Todo replace iminutes and ihour with local var
-  set(this->ihour,this->iminute,0);
+  set(year(),month(),day(),this->ihour,this->iminute,0);
 
   return true;
 }
 
-void Clock::set(int h,int m,int s)
+void Clock::set(int y,int m,int d,int h,int n,int s)
 {
   tmElements_t tm;
   time_t t;
   
   tm.Hour = h;  
-  tm.Minute = m;
+  tm.Minute = n;
   tm.Second = s;
+  tm.Month = m;
+  tm.Day = d;
+  tm.Year = y;
   t = makeTime(tm);
   
   RTC.set(t);   // set the RTC and the system time to the received value
@@ -72,18 +84,18 @@ void Clock::set(int h,int m,int s)
 boolean Clock::parseDate(String t)
 { 
   // dd/mm/yyyy
-  int day;
-  int month;
-  int year;
+  int d;
+  int m;
+  int y;
   if (t.length() != 10) return false;
   if (t.charAt(2) != '/' || t.charAt(5) != '/') return false;
-  day=t.substring(0,2).toInt();
-  month=t.substring(3,5).toInt();
-  year=t.substring(6,10).toInt();
-  if (day==0 || month==0 || year==0) return false;
-  //Todo: Set RTC here
-  Serial.println(day);
-  Serial.println(month);
-  Serial.println(year);
+  d=t.substring(0,2).toInt();
+  m=t.substring(3,5).toInt();
+  y=t.substring(6,10).toInt();
+  if (d ==0 || m==0 || y==0) return false;
+
+  //Todo adjust for local time?
+  set(y,m,d,hour(),minute(),second());
+
   return true;
 }

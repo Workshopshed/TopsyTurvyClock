@@ -101,6 +101,7 @@ void Controller::readinput()
 void Controller::dump()
 {
    Serial.println("=================");
+   this->_clock->display();
    Serial.print(" Micros:");
    Serial.println(micros());
    Serial.print(" Hours:");

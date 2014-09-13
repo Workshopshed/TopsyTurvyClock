@@ -24,9 +24,6 @@ class Clock {
     int minute();
     int second();
   private:
-    /* Temp, replace with Time.h functions etc. */
-    int ihour;
-    int iminute;
     Timezone *_tz;
     DS1307RTC *_rtc;
     void set(int y,int m,int d,int h,int n,int s);

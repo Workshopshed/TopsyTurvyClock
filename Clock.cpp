@@ -19,17 +19,17 @@ void Clock::init(){
 //Todo: Replace with calls to RTC converted to local time with TimeZone
 int Clock::hour()
 {
-    return this->ihour;
+    return hour();
 }
 
 int Clock::minute()
 {
-  return this->iminute;
+  return minute();
 }
 
 int Clock::second()
 {
-  return 0;
+  return second();
 }
 
 void Clock::display()
@@ -39,9 +39,9 @@ void Clock::display()
    Serial.println(minute());
    
    Serial.print(' ');
-   Serial.println(day());
+   Serial.print(day());
    Serial.print('/');
-   Serial.println(month());
+   Serial.print(month());
    Serial.print('/');
    Serial.println(year());
    
@@ -50,16 +50,17 @@ void Clock::display()
 //Extend to seconds?
 boolean Clock::parseTime(String t)
 {
+  int h;
+  int m;
   if (t.length() != 5) return false;
   if (t.charAt(2) != ':') return false;
-  this->ihour=t.substring(0,2).toInt();
-  if (this->ihour>23) return false;
-  this->iminute=t.substring(3,5).toInt();
-  if (this->iminute>59) return false;
+  h=t.substring(0,2).toInt();
+  if (h>23) return false;
+  m=t.substring(3,5).toInt();
+  if (m>59) return false;
   
   //Todo adjust for local time?
-  //Todo replace iminutes and ihour with local var
-  set(year(),month(),day(),this->ihour,this->iminute,0);
+  set(year(),month(),day(),h,m,0);
 
   return true;
 }

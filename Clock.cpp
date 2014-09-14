@@ -8,7 +8,7 @@ Clock::Clock(Timezone *tz,DS1307RTC *rtc)
 
 void Clock::init(){
   //Setup Time provider
-  setSyncProvider(_rtc->get); 
+  setSyncProvider(this->_rtc->get); 
   setSyncInterval(59);
   if(timeStatus()!= timeSet)
     Serial.println("Unable to sync with the RTC");
@@ -47,20 +47,24 @@ void Clock::display()
    
 };
 
-//Extend to seconds?
 boolean Clock::parseTime(String t)
 {
   int h;
   int m;
-  if (t.length() != 5) return false;
+  int s;
+  if (t.length() != 5 && t.length() != 8) return false;
   if (t.charAt(2) != ':') return false;
   h=t.substring(0,2).toInt();
   if (h>23) return false;
   m=t.substring(3,5).toInt();
   if (m>59) return false;
+  if (t.length() == 8) {
+    if (t.charAt(5) != ':') return false;
+    s = t.substring(6,8).toInt();
+  }
   
   //Todo adjust for local time?
-  set(year(),month(),day(),h,m,0);
+  set(year(),month(),day(),h,m,s);
 
   return true;
 }
@@ -75,10 +79,11 @@ void Clock::set(int y,int m,int d,int h,int n,int s)
   tm.Second = s;
   tm.Month = m;
   tm.Day = d;
-  tm.Year = y;
+  //Adjust years for TM / DS1307 library
+  tm.Year = y2kYearToTm(y);
   t = makeTime(tm);
   
-  RTC.set(t);   // set the RTC and the system time to the received value
+  this->_rtc->set(t);   // set the RTC and the system time to the received value
   setTime(t); 
 }
 

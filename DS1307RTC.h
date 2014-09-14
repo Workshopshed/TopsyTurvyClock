@@ -30,7 +30,7 @@ class DS1307RTC
 #undef RTC // workaround for Arduino Due, which defines "RTC"...
 #endif
 
-extern DS1307RTC RTC;
+//extern DS1307RTC RTC;
 
 #endif
  

@@ -20,9 +20,9 @@ class Clock {
     boolean parseDate(String d); 
     void display();
     void init();
-    int hour();
-    int minute();
-    int second();
+    int chour();
+    int cminute();
+    int csecond();
   private:
     Timezone *_tz;
     DS1307RTC *_rtc;

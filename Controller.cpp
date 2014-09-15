@@ -89,8 +89,8 @@ void Controller::readinput()
   {
     if (this->running) {
       if (this->_stepperM->isDone() && this->_stepperH->isDone()) {
-        this->_stepperH->rotateToDegrees(CalcHourPos(this->_clock->hour(),this->_clock->minute()));
-        this->_stepperM->rotateToDegrees(CalcMinutePos(this->_clock->minute(),this->_clock->second()));
+        this->_stepperH->rotateToDegrees(CalcHourPos(this->_clock->chour(),this->_clock->cminute()));
+        this->_stepperM->rotateToDegrees(CalcMinutePos(this->_clock->cminute(),this->_clock->csecond()));
       }
     }
     
@@ -100,18 +100,20 @@ void Controller::readinput()
   
 void Controller::dump()
 {
-   Serial.println("=================");
+   Serial.println("1================");
    this->_clock->display();
-   Serial.print(" Micros:");
-   Serial.println(micros());
-   Serial.print(" Hours:");
-   Serial.println(this->_clock->hour());   
+   Serial.println("2================");
+   Serial.print(" Millis:");
+   Serial.println(millis());
+   Serial.println("3================");
    Serial.print(" Target Angle:");
-   Serial.println(CalcHourPos(this->_clock->hour(),this->_clock->minute()));
+   Serial.println(CalcHourPos(this->_clock->chour(),this->_clock->cminute()));
    Serial.print(" Minutes:");
-   Serial.println(this->_clock->minute());   
+   Serial.println(this->_clock->cminute());   
    Serial.print(" Target Angle:");
-   Serial.println(CalcMinutePos(this->_clock->minute(),this->_clock->second()));
+   Serial.println(CalcMinutePos(this->_clock->cminute(),this->_clock->csecond()));
+   Serial.println("4================");
    this->_stepperH->dump();
+   Serial.println("5================");
    this->_stepperM->dump();
 }

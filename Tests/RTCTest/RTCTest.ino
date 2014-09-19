@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include <DS1307.h>
+#include "DS1307.h"
  
 int rtc[7];
 byte rr[7];
@@ -13,23 +13,26 @@ void setup()
   Serial.begin(9600);
   RTC.get(rtc,true);
   //if(rtc[6]<12){
+    
     Serial.println("SET INITIAL TIME:");
-    RTC.stop();
-    RTC.set(DS1307_SEC,1);
-    RTC.set(DS1307_MIN,9);
-    RTC.set(DS1307_HR,23);
-    RTC.set(DS1307_DOW,7);
-    RTC.set(DS1307_DATE,27);
-    RTC.set(DS1307_MTH,1);
-    RTC.set(DS1307_YR,14);
-    RTC.start();
+    //RTC.stop();
+    //RTC.set(DS1307_SEC,1);
+    //RTC.set(DS1307_MIN,9);
+    //RTC.set(DS1307_HR,23);
+    //RTC.set(DS1307_DOW,7);
+    //RTC.set(DS1307_DATE,27);
+    //RTC.set(DS1307_MTH,1);
+    //RTC.set(DS1307_YR,14);
+    
   //}
+  
   //RTC.SetOutput(LOW);
   //RTC.SetOutput(HIGH);
   //RTC.SetOutput(DS1307_SQW1HZ);
   //RTC.SetOutput(DS1307_SQW4KHZ);
   //RTC.SetOutput(DS1307_SQW8KHZ);
   RTC.SetOutput(DS1307_SQW32KHZ);
+  RTC.start();
 }
  
 void loop()

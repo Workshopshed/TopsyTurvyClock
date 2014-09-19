@@ -1,75 +1,61 @@
 #include <Arduino.h>
 #include <Wire.h>
+#include "Time.h"
 #include "DS1307.h"
  
-int rtc[7];
-byte rr[7];
-int ledPin =  13;
+int ledPin = 13;
+DS1307 rtc;
+
 void setup()
 {
-  DDRC|=_BV(2) |_BV(3);  // POWER:Vcc Gnd
-  PORTC |=_BV(3);  // VCC PINC3
   pinMode(ledPin, OUTPUT);  
   Serial.begin(9600);
-  RTC.get(rtc,true);
-  //if(rtc[6]<12){
-    
-    Serial.println("SET INITIAL TIME:");
-    //RTC.stop();
-    //RTC.set(DS1307_SEC,1);
-    //RTC.set(DS1307_MIN,9);
-    //RTC.set(DS1307_HR,23);
-    //RTC.set(DS1307_DOW,7);
-    //RTC.set(DS1307_DATE,27);
-    //RTC.set(DS1307_MTH,1);
-    //RTC.set(DS1307_YR,14);
-    
-  //}
-  
-  //RTC.SetOutput(LOW);
-  //RTC.SetOutput(HIGH);
-  //RTC.SetOutput(DS1307_SQW1HZ);
-  //RTC.SetOutput(DS1307_SQW4KHZ);
-  //RTC.SetOutput(DS1307_SQW8KHZ);
-  RTC.SetOutput(DS1307_SQW32KHZ);
-  RTC.start();
+  delay(5000);
+/*
+#define  tmYearToCalendar(Y) ((Y) + 1970)  // full four digit year 
+#define  CalendarYrToTm(Y)   ((Y) - 1970)
+#define  tmYearToY2k(Y)      ((Y) - 30)    // offset is from 2000
+#define  y2kYearToTm(Y)      ((Y) + 30)   
+*/
+
+  tmElements_t tm; //TM structure values are unsigned integeres aka a byte so the value is from 0 to 255
+  tm.Year = CalendarYrToTm(2014);
+  tm.Month = 9;
+  tm.Day = 19;
+  tm.Hour = 20;
+  tm.Minute = 15;
+  tm.Second = 30;
+  rtc.set(makeTime(tm));
 }
  
 void loop()
 {
   int i;
-  RTC.get(rtc,true);
+  Serial.println("--------------");
+  time_t t = rtc.get();
+  Display(t);
  
-  for(i=0; i<7; i++)
-  {
-    Serial.print(rtc[i]);
-    Serial.print(" ");
-  }
-  Serial.println();
     digitalWrite(ledPin, HIGH); 
     delay(500);
     digitalWrite(ledPin, LOW);
     delay(500);
- if (Serial.available() > 6) {
-     for(i=0;i<7;i++){
-       rr[i]=BCD2DEC(Serial.read());
-     }
-     Serial.println("SET TIME:");
-       RTC.stop();
-    RTC.set(DS1307_SEC,rr[6]);
-    RTC.set(DS1307_MIN,rr[5]);
-    RTC.set(DS1307_HR,rr[4]);
-    RTC.set(DS1307_DOW,rr[3]);
-    RTC.set(DS1307_DATE,rr[2]);
-    RTC.set(DS1307_MTH,rr[1]);
-    RTC.set(DS1307_YR,rr[0]);
-    RTC.start();
- }
+
 }
-char BCD2DEC(char var){
-  if (var>9){
-     var=(var>>4)*10+(var&0x0f);
-  }
-  return var;
+
+void Display(time_t t)
+{
+  Serial.print (hour(t));
+  Serial.print (':');
+  Serial.print (minute(t));
+  Serial.print (':');
+  Serial.println (second(t));
+  Serial.print (day(t));
+  Serial.print ('/');
+  Serial.print (month(t));
+  Serial.print ('/');
+  Serial.println (year(t));  
+  
 }
+
+
 

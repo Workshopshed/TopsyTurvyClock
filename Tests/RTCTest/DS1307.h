@@ -15,7 +15,8 @@
 #endif
 
 // include types & constants of Wire ic2 lib
-#include "Wire.h"
+#include <Wire.h>
+#include <Time.h>
 
 #define DS1307_SEC 0
 #define DS1307_MIN 1
@@ -63,21 +64,25 @@ class DS1307
   // user-accessible "public" interface
   public:
     DS1307();
-    void get(int *, boolean);
-    int get(int, boolean);
-	void set(int, int);
+    time_t get(); // New Public method to match time library requirements
+    void set(time_t t);
     void start(void);
     void stop(void);
     void SetOutput(uint8_t);
-	uint8_t GetOutput(void);
+    uint8_t GetOutput(void);
 	
   // library-accessible "private" interface
   private:
     uint8_t rtc_bcd[7]; // used prior to read/set ds1307 registers;
 	void read(void);
 	void save(void);
+    void set(int, int);
+    void get(int *, boolean);
+    int get(int, boolean);    
+    uint8_t dec2bcd(uint8_t num);
+    uint8_t bcd2dec(uint8_t num);
 };
 
-extern DS1307 RTC;
+//extern DS1307 RTC;
 
 #endif

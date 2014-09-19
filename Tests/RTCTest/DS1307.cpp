@@ -1,5 +1,6 @@
-#include "Wire.h"
+#include <Wire.h>
 #include "DS1307.h"
+#include <Time.h>
 
 DS1307::DS1307()
 {
@@ -52,35 +53,42 @@ void DS1307::get(int *rtc, boolean refresh)   // Aquire data from buffer and con
   }
 }
 
+time_t DS1307::get()   // Aquire data from buffer and convert to time_t
+{
+  read(); //Refresh
+  tmElements_t tm;
+  tm.Second = get(DS1307_SEC,0);
+  tm.Minute = get(DS1307_MIN,0);
+  tm.Hour = get(DS1307_HR,0);
+  tm.Wday = get(DS1307_DOW,0);
+  tm.Day = get(DS1307_DATE,0);
+  tm.Month = get(DS1307_MTH,0);
+  tm.Year = y2kYearToTm(get(DS1307_YR,0));
+  return(makeTime(tm));
+}
+
+void DS1307::set(time_t t)
+{
+  stop();
+  tmElements_t tm;
+  breakTime(t, tm);
+  set(DS1307_SEC,tm.Second);
+  set(DS1307_MIN,tm.Minute);
+  set(DS1307_HR,tm.Hour);
+  set(DS1307_DOW,tm.Wday);
+  set(DS1307_DATE,tm.Day);
+  set(DS1307_MTH,tm.Month);
+  set(DS1307_YR,tmYearToY2k(tm.Year));
+  save();
+  start();
+}
+
+
 int DS1307::get(int c, boolean refresh)  // aquire individual RTC item from buffer, return as int, refresh buffer if required
 {
   if(refresh) read();
   int v=-1;
-  switch(c)
-  {
-  case DS1307_SEC:
-    v=(10*((rtc_bcd[DS1307_SEC] & DS1307_HI_SEC)>>4))+(rtc_bcd[DS1307_SEC] & DS1307_LO_BCD);
-	break;
-  case DS1307_MIN:
-    v=(10*((rtc_bcd[DS1307_MIN] & DS1307_HI_MIN)>>4))+(rtc_bcd[DS1307_MIN] & DS1307_LO_BCD);
-	break;
-  case DS1307_HR:
-    v=(10*((rtc_bcd[DS1307_HR] & DS1307_HI_HR)>>4))+(rtc_bcd[DS1307_HR] & DS1307_LO_BCD);
-	break;
-  case DS1307_DOW:
-    v=rtc_bcd[DS1307_DOW] & DS1307_LO_DOW;
-	break;
-  case DS1307_DATE:
-    v=(10*((rtc_bcd[DS1307_DATE] & DS1307_HI_DATE)>>4))+(rtc_bcd[DS1307_DATE] & DS1307_LO_BCD);
-	break;
-  case DS1307_MTH:
-    v=(10*((rtc_bcd[DS1307_MTH] & DS1307_HI_MTH)>>4))+(rtc_bcd[DS1307_MTH] & DS1307_LO_BCD);
-	break;
-  case DS1307_YR:
-    v=(10*((rtc_bcd[DS1307_YR] & DS1307_HI_YR)>>4))+(rtc_bcd[DS1307_YR] & DS1307_LO_BCD)+DS1307_BASE_YR;
-	break;
-  } // end switch
-  return v;
+  return bcd2dec(rtc_bcd[c]);
 }
 
 void DS1307::set(int c, int v)  // Update buffer, then update the chip
@@ -92,20 +100,20 @@ void DS1307::set(int c, int v)  // Update buffer, then update the chip
     {
 	//preserve existing clock state (running/stopped)
 	int state=rtc_bcd[DS1307_SEC] & DS1307_CLOCKHALT;
-	rtc_bcd[DS1307_SEC]=state | ((v / 10)<<4) + (v % 10);
+	rtc_bcd[DS1307_SEC]=state | dec2bcd(v);
     }
     break;
   case DS1307_MIN:
     if(v<60 && v>-1)
     {
-	rtc_bcd[DS1307_MIN]=((v / 10)<<4) + (v % 10);
+	rtc_bcd[DS1307_MIN]=dec2bcd(v);
     }
     break;
   case DS1307_HR:
   // TODO : AM/PM  12HR/24HR
     if(v<24 && v>-1)
     {
-	rtc_bcd[DS1307_HR]=((v / 10)<<4) + (v % 10);
+	rtc_bcd[DS1307_HR]=dec2bcd(v);
     }
     break;
   case DS1307_DOW:
@@ -117,23 +125,22 @@ void DS1307::set(int c, int v)  // Update buffer, then update the chip
   case DS1307_DATE:
     if(v<31 && v>-1)
     {
-	rtc_bcd[DS1307_DATE]=((v / 10)<<4) + (v % 10);
+	rtc_bcd[DS1307_DATE]=dec2bcd(v);
     }
     break;
   case DS1307_MTH:
     if(v<13 && v>-1)
     {
-	rtc_bcd[DS1307_MTH]=((v / 10)<<4) + (v % 10);
+	rtc_bcd[DS1307_MTH]=dec2bcd(v);
     }
     break;
   case DS1307_YR:
     if(v<80 && v>-1)
     {
-	rtc_bcd[DS1307_YR]=((v / 10)<<4) + (v % 10);
+	rtc_bcd[DS1307_YR]=dec2bcd(v);
     }
     break;
   } // end switch
-  save();
 }
 
 void DS1307::stop(void)
@@ -218,4 +225,16 @@ uint8_t DS1307::GetOutput(void)
   break;
   }
   return c;
+}
+
+// Convert Decimal to Binary Coded Decimal (BCD)
+uint8_t DS1307::dec2bcd(uint8_t num)
+{
+  return ((num / 10)<<4) + (num % 10);
+}
+
+// Convert Binary Coded Decimal (BCD) to Decimal
+uint8_t DS1307::bcd2dec(uint8_t num)
+{
+  return (10*((num & DS1307_HI_SEC)>>4))+(num & DS1307_LO_BCD);
 }

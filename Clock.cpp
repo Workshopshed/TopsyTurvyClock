@@ -1,15 +1,12 @@
 #include "Clock.h"
 
-Clock::Clock(Timezone *tz,DS1307RTC *rtc)
+Clock::Clock(Timezone *tz,DS1307 *rtc)
 {
     _tz = tz;
     _rtc = rtc;
 }
 
 void Clock::init(){
-  //Setup Time provider#
-  setSyncProvider(_rtc->get); 
-  setSyncInterval(59);
   delay(1000); // Give RTC time to start up
   if(timeStatus()!= timeSet)
     Serial.println("Unable to sync with the RTC");
@@ -80,8 +77,7 @@ void Clock::set(int y,int m,int d,int h,int n,int s)
   tm.Second = s;
   tm.Month = m;
   tm.Day = d;
-  //Adjust years for TM / DS1307 library
-  tm.Year = y2kYearToTm(y);
+  tm.Year = CalendarYrToTm(y); //TM.Year is a byte so can't take year > 255
   t = makeTime(tm);
   
   this->_rtc->set(t);   // set the RTC and the system time to the received value

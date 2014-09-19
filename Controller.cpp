@@ -100,20 +100,16 @@ void Controller::readinput()
   
 void Controller::dump()
 {
-   Serial.println("1================");
+   Serial.println("================");
    this->_clock->display();
-   Serial.println("2================");
    Serial.print(" Millis:");
    Serial.println(millis());
-   Serial.println("3================");
    Serial.print(" Target Angle:");
    Serial.println(CalcHourPos(this->_clock->chour(),this->_clock->cminute()));
    Serial.print(" Minutes:");
    Serial.println(this->_clock->cminute());   
    Serial.print(" Target Angle:");
    Serial.println(CalcMinutePos(this->_clock->cminute(),this->_clock->csecond()));
-   Serial.println("4================");
    this->_stepperH->dump();
-   Serial.println("5================");
    this->_stepperM->dump();
 }

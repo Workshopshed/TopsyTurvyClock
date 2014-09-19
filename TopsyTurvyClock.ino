@@ -10,7 +10,7 @@ TimeChangeRule BST = {"BST", Last, Sun, Mar, 1, 60}; //British Summer Time
 TimeChangeRule GMT = {"GMT", Last, Sun, Oct, 2, 0};  //Standard Time
 Timezone tz(BST, GMT);
 
-DS1307RTC rtc;
+DS1307 rtc;
 
 Clock clock(&tz,&rtc);
 
@@ -19,6 +19,10 @@ Controller con(&stepperh,&stepperm,&clock);
 NonBlockDelay d;
 bool motorsinit;
 
+time_t timesync(){
+  return rtc.get();
+}
+
 void setup()
 {
   Serial.begin(9600);
@@ -26,6 +30,9 @@ void setup()
   //; // wait for serial port to connect. Needed for Leonardo only
   //}
   
+  //Setup Time provider#
+  setSyncProvider(timesync); 
+  setSyncInterval(59);
   con.init();
 }
 

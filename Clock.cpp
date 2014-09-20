@@ -34,7 +34,9 @@ void Clock::display()
 {
    Serial.print(hour());
    Serial.print(':');
-   Serial.println(minute());
+   Serial.print(minute());
+   Serial.print(':');
+   Serial.println(second());
    
    Serial.print(' ');
    Serial.print(day());

@@ -18,3 +18,5 @@ CustomStepper class by Igor Campos
 TimeZone class by Jack Christensen
 
 Time by Michael Margolis
+
+DS1307 based on work by DFRobot and Michael Margolis

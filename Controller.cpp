@@ -94,7 +94,7 @@ void Controller::readinput()
  
  float Controller::CalcMinutePos(int m,int s)
  {
-   return _positions[(int)(m / 5.0)] + ((m % 5) * 6.0) + (s * 0.1);
+   return _positions[(int)(m / 5.0)] + ((m % 5) * 6.0);
  }
  
  float Controller::CalcHourPos(int h,int m)

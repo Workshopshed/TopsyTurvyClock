@@ -30,6 +30,18 @@ void Controller::init()
   this->running = true;
 }
 
+void Controller::Adjust() 
+{
+  //Fine tune positions
+  if (this->commandbuffer.charAt(1) == 'H') {
+    this->hourAdjust += this->commandbuffer.substring(2).toInt();
+  }
+  if (this->commandbuffer.charAt(1) == 'M') {
+    this->minuteAdjust += this->commandbuffer.substring(2).toInt();
+  }
+  //Todo: Save these to Eeprom
+}
+
 void Controller::readinput()
 {
   if (Serial.available() > 0)
@@ -41,6 +53,10 @@ void Controller::readinput()
       case '?':
         Serial.println("Todo:Instructions here");
         break;
+      case 'A':
+        Serial.println("Motor Adjustments");
+        Adjust();
+        break;  
       case 'T':
         if (this->_clock->parseTime(this->commandbuffer.substring(1))){
           Serial.println("Setting Time");
@@ -64,6 +80,7 @@ void Controller::readinput()
         this->running = false;
         break;
       case 'H':
+        Serial.println("Homing and stop");
         this->_stepperH->home();
         this->_stepperM->home();
         this->running = false;
@@ -77,20 +94,20 @@ void Controller::readinput()
  
  float Controller::CalcMinutePos(int m,int s)
  {
-   return _positions[(int)(m / 5.0)-1] + ((m % 5) * 6.0) + (s * 0.1);
+   return _positions[(int)(m / 5.0)] + ((m % 5) * 6.0) + (s * 0.1);
  }
  
  float Controller::CalcHourPos(int h,int m)
  {
-   return _positions[h-1] + (m * 0.5);
+   return _positions[(h % 12)] + (m * 0.5);
  }
  
  void Controller::run()
   {
     if (this->running) {
       if (this->_stepperM->isDone() && this->_stepperH->isDone()) {
-        this->_stepperH->rotateToDegrees(CalcHourPos(this->_clock->chour(),this->_clock->cminute()));
-        this->_stepperM->rotateToDegrees(CalcMinutePos(this->_clock->cminute(),this->_clock->csecond()));
+        this->_stepperH->rotateToDegrees(CalcHourPos(this->_clock->chour(),this->_clock->cminute()) + this->hourAdjust);
+        this->_stepperM->rotateToDegrees(CalcMinutePos(this->_clock->cminute(),this->_clock->csecond()) + this->minuteAdjust);
       }
     }
     
@@ -101,15 +118,16 @@ void Controller::readinput()
 void Controller::dump()
 {
    Serial.println("================");
+   Serial.println(this->running ? "Running" : "Stopped");
+   Serial.print("Hour Adjust:");
+   Serial.println(this->hourAdjust);
+   Serial.print("Minute Adjust:");
+   Serial.println(this->minuteAdjust);   
    this->_clock->display();
-   Serial.print(" Millis:");
-   Serial.println(millis());
-   Serial.print(" Target Angle:");
-   Serial.println(CalcHourPos(this->_clock->chour(),this->_clock->cminute()));
-   Serial.print(" Minutes:");
-   Serial.println(this->_clock->cminute());   
-   Serial.print(" Target Angle:");
-   Serial.println(CalcMinutePos(this->_clock->cminute(),this->_clock->csecond()));
+   Serial.println("------------------");
+   Serial.println("Hour Motor");
    this->_stepperH->dump();
+   Serial.println("------------------");
+   Serial.println("Minute Motor");
    this->_stepperM->dump();
 }

@@ -108,6 +108,7 @@ void CustomStepper::step()
 
 void CustomStepper::home()
 {
+  this->direction = CW;
   this->rotateDegrees(360);
   if (this->readOpto() == 1){
     this->unhome();
@@ -232,9 +233,6 @@ boolean CustomStepper::readOpto()
 //Return state of class
 void CustomStepper::dump()
 {
-    Serial.println("------------------");
-    Serial.print("Pin1: ");
-        Serial.println(this->pin1);  
     Serial.print(" stepsToGo: ");
 	Serial.println(this->stepsToGo);
     Serial.print(" mode: ");

@@ -1,6 +1,4 @@
-#include <Wire.h>
 #include "DS1307.h"
-#include <Time.h>
 
 DS1307::DS1307()
 {
@@ -85,7 +83,6 @@ void DS1307::set(time_t t)
 int DS1307::get(int c, boolean refresh)  // aquire individual RTC item from buffer, return as int, refresh buffer if required
 {
   if(refresh) read();
-  int v=-1;
   return bcd2dec(rtc_bcd[c]);
 }
 

@@ -25,7 +25,10 @@ class Controller {
     CustomStepper *_stepperH;
     CustomStepper *_stepperM;
     float CalcMinutePos(int m, int s);
-    float CalcHourPos(int h, int m); 
+    float CalcHourPos(int h, int m);
+    void Adjust();
+    float hourAdjust;
+    float minuteAdjust;
     bool running;
     float _positions[12];
 };

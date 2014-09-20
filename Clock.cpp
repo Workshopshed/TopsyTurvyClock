@@ -50,6 +50,7 @@ boolean Clock::parseTime(String t)
   int h;
   int m;
   int s;
+  s=0;
   if (t.length() != 5 && t.length() != 8) return false;
   if (t.charAt(2) != ':') return false;
   h=t.substring(0,2).toInt();

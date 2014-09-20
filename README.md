@@ -12,13 +12,21 @@ Setup and loop don't have much to do, simply repeatedly calling the controller's
 Instructions
 ------------
 The clock time and date can be set using the serial port.
+
 Commands:
+
 ? - Instructions
+
 H - Home and stop
+
 Thh:mm - Set time
+
 Ddd/mm/yyyy - Set date
+
 R - Run
+
 S - Stop
+
 
 Thanks to
 ---------

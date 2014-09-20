@@ -51,7 +51,12 @@ void Controller::readinput()
     {
       switch(this->commandbuffer.charAt(0)){
       case '?':
-        Serial.println("Todo:Instructions here");
+        Serial.println("? - Instructions");
+        Serial.println("H - Home and stop");
+        Serial.println("Thh:mm - Set time");
+        Serial.println("Ddd/mm/yyyy - Set date");
+        Serial.println("R - Run");
+        Serial.println("S - Stop");
         break;
       case 'A':
         Serial.println("Motor Adjustments");

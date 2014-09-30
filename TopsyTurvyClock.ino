@@ -17,7 +17,8 @@ Clock clock(&tz,&rtc);
 Controller con(&stepperh,&stepperm,&clock);
 
 NonBlockDelay d;
-bool motorsinit;
+
+int RXLED = 17;
 
 time_t timesync(){
   return rtc.get();
@@ -46,7 +47,8 @@ void loop()
   d.Delay(5000);
   }  
   
-
+  digitalWrite(RXLED, second() % 2); 
+  
 }
 
 

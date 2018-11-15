@@ -1,9 +1,9 @@
 TopsyTurvyClock
 ===============
 
-See http://app.snapapp.com/simplyavrcontest for video of clock in action and to vote.
-
 The Topsy Turvy Clock has the numbers in the wrong place by still tells the right time. It's powered by an Arduino Micro Pro clone, some driver chips and a DS1037 real time clock.
+
+![Clock face](ClockFaceFinished.jpg) ![Clock electronics](ClockBackFinished.jpg)
 
 The stepper motor class provides the interface to the motor and optosensors modified CustomStepper class from Igor Campos.
 
@@ -12,6 +12,9 @@ The clock class encapsulates the RTC and TimeZone classes with methods to set th
 The controller class glues everything together and provides the UI in the form of serial commands. The code uses the String object's abilities to parse the commands.
 
 Setup and loop don't have much to do, simply repeatedly calling the controller's run method.
+
+
+[![Clock in action](http://img.youtube.com/vi/ZTHuGbSgcuI/0.jpg)](https://www.youtube.com/watch?v=ZTHuGbSgcuI)]
 
 Instructions
 ------------
